@@ -22,8 +22,9 @@ public class BandwidthDispatcherNotifier implements AnnounceResponseHandlerChain
     public void onAnnounceStartSuccess(final Announcer announcer, final SuccessAnnounceResponse result) {
         log.debug("Register {} in bandwidth dispatcher and update stats.", announcer.getTorrentInfoHash().getHumanReadable());
         final InfoHash infoHash = announcer.getTorrentInfoHash();
+        final String fileName = announcer.getTorrentFileName();
         this.bandwidthDispatcher.registerTorrent(infoHash);
-        this.bandwidthDispatcher.updateTorrentPeers(infoHash, result.getSeeders(), result.getLeechers());
+        this.bandwidthDispatcher.updateTorrentPeers(infoHash, result.getSeeders(), result.getLeechers(), fileName);
     }
 
     @Override
@@ -34,7 +35,8 @@ public class BandwidthDispatcherNotifier implements AnnounceResponseHandlerChain
     public void onAnnounceRegularSuccess(final Announcer announcer, final SuccessAnnounceResponse result) {
         log.debug("Update {} stats in bandwidth dispatcher.", announcer.getTorrentInfoHash().getHumanReadable());
         final InfoHash infoHash = announcer.getTorrentInfoHash();
-        this.bandwidthDispatcher.updateTorrentPeers(infoHash, result.getSeeders(), result.getLeechers());
+        final String fileName = announcer.getTorrentFileName();
+        this.bandwidthDispatcher.updateTorrentPeers(infoHash, result.getSeeders(), result.getLeechers(), fileName);
     }
 
     @Override

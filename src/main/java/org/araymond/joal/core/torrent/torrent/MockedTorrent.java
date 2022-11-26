@@ -21,6 +21,7 @@ public class MockedTorrent extends Torrent {
     public static final Charset BYTE_ENCODING = Charsets.ISO_8859_1;
 
     private final InfoHash infoHash;
+    private final String filename;
     /**
      * Create a new torrent from meta-info binary data.
      * <p>
@@ -32,10 +33,11 @@ public class MockedTorrent extends Torrent {
      * @throws IOException When the info dictionary can't be read or
      *                     encoded and hashed back to create the torrent's SHA-1 hash.
      */
-    private MockedTorrent(final byte[] torrent, final boolean seeder) throws IOException, NoSuchAlgorithmException {
+    private MockedTorrent(final byte[] torrent, final boolean seeder, final String filename) throws IOException, NoSuchAlgorithmException {
         super(torrent, seeder);
 
         try {
+
             // Torrent validity tests
             final int pieceLength = this.decoded_info.get("piece length").getInt();
             final ByteBuffer piecesHashes = ByteBuffer.wrap(this.decoded_info.get("pieces").getBytes());
@@ -47,18 +49,21 @@ public class MockedTorrent extends Torrent {
             throw new IllegalArgumentException("Error reading torrent meta-info fields!", ex);
         }
         this.infoHash = new InfoHash(this.getInfoHash());
+        this.filename = filename;
     }
 
     public InfoHash getTorrentInfoHash() {
         return this.infoHash;
     }
-
+    public String getTorrentFileName() {
+        return this.filename;
+    }
     public static MockedTorrent fromFile(final File torrent) throws IOException, NoSuchAlgorithmException {
         final byte[] data = FileUtils.readFileToByteArray(torrent);
-        return new MockedTorrent(data, true);
+        return new MockedTorrent(data, true, torrent.getName());
     }
 
     public static MockedTorrent fromBytes(final byte[] bytes) throws IOException, NoSuchAlgorithmException {
-        return new MockedTorrent(bytes, false);
+        return new MockedTorrent(bytes, false,"dummyName");
     }
 }

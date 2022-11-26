@@ -123,6 +123,10 @@ public class Announcer implements AnnouncerFacade {
         return this.getTorrent().getTorrentInfoHash();
     }
 
+    public String getTorrentFileName() {
+        return this.getTorrent().getTorrentFileName();
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

@@ -87,9 +87,13 @@ public class TorrentFileProvider extends FileAlterationListenerAdaptor {
     public void onFileCreate(final File file) {
         log.info("Torrent file addition detected, hot creating file [{}]", file.getAbsolutePath());
         try {
+            log.info("ok0");
             final MockedTorrent torrent = MockedTorrent.fromFile(file);
+            log.info("CREATED CUSTOM NAME [{}]", torrent.getTorrentFileName());
             this.torrentFiles.put(file, torrent);
+
             this.torrentFileChangeListener.forEach(listener -> listener.onTorrentFileAdded(torrent));
+
         } catch (final IOException | NoSuchAlgorithmException e) {
             log.warn("Failed to read file [{}], moved to archive folder", file.getAbsolutePath(), e);
             this.moveToArchiveFolder(file);

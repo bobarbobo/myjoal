@@ -25,8 +25,8 @@ public class WeightHolder<E> {
         this.lock = new ReentrantLock();
     }
 
-    public void addOrUpdate(final E item, final Peers peers) {
-        final double weight = this.weightCalculator.calculate(peers);
+    public void addOrUpdate(final E item, final Peers peers, String fileName) {
+        final double weight = this.weightCalculator.calculate(peers, fileName);
         lock.lock();
         try {
             ofNullable(this.weightMap.put(item, weight)).ifPresentOrElse(
